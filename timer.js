@@ -1,40 +1,44 @@
-
 class CountdownTimer {
-  constructor(targetDate) {
-   
+  constructor(selector) {
+    this.selector = selector.selector;
+    this.targetDate = selector.targetDate;
+    this.daysSpan = document.querySelector('[data-value="days"]');
+    this.hoursSpan = document.querySelector('[data-value="hours"]');
+    this.minutesSpan = document.querySelector('[data-value="mins"]');
+    this.secondsSpan = document.querySelector('[data-value="secs"]');
+    console.log(this.daysSpan);
+    this.updateClock = this.updateClock.bind(this);
+    const x = setInterval(this.updateClock, 1000);
+  }
+   pad(value) {
+    return String(value).padStart(2, "0");
+  }
+  updateClock() {
+    var now = new Date().getTime();
+this.createSpan(now);
+  }
+  createSpan(now) {
+    this.time = this.targetDate - now;
+    const days = this.pad(Math.floor(this.time / (1000 * 60 * 60 * 24)));
+    const hours = this.pad(
+      Math.floor((this.time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+    );
+    const minutes = this.pad(
+      Math.floor((this.time % (1000 * 60 * 60)) / (1000 * 60))
+    );
+    const seconds = this.pad(Math.floor((this.time % (1000 * 60)) / 1000));
 
-    const x = setInterval(function () {
-            var now = new Date().getTime();
-
-     
-      var time = targetDate.targetDate - now;
-
-      function pad(value){
-        return String(value).padStart(2, '0');
+    
+    this.daysSpan.innerHTML = days;
+    this.hoursSpan.innerHTML = hours;
+    this.minutesSpan.innerHTML = minutes;
+    this.secondsSpan.innerHTML = seconds;
+    console.log(this.daysSpan);
+  
+    if (this.time < 0) {
+      clearInterval(x);
+      document.getElementById(this.selector).innerHTML = "EXPIRED";
     }
-      var days = pad(Math.floor(time / (1000 * 60 * 60 * 24)));
-      var hours = pad(Math.floor(
-        (time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-      ));
-      var minutes = pad(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
-      var seconds = pad(Math.floor((time % (1000 * 60)) / 1000));
-const clock = {
-    days:document.querySelector('[data-value="days"]'),
-    hours:document.querySelector('[data-value="hours"]'),
-    minutes:document.querySelector('[data-value="mins"]'),
-    seconds:document.querySelector('[data-value="secs"]'),
-};
-console.log(clock.days);
-clock.days.innerHTML = days;
-clock.hours.innerHTML = hours;
-clock.minutes.innerHTML = minutes;
-clock.seconds.innerHTML = seconds;
-      
-      if (time < 0) {
-        clearInterval(x);
-        document.getElementById("timer-1").innerHTML = "EXPIRED";
-      }
-    }, 1000);
   }
 }
 new CountdownTimer({
